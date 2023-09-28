@@ -9,20 +9,18 @@ typedef struct nodo {
 
 struct lista {
     nodo_t *nodo_inicio;
+    nodo_t *nodo_final;
     int cantidad;
 };
 
 struct lista_iterador {
     nodo_t *nodo_actual;
+    lista_t *lista;
 };
 
 lista_t *lista_crear()
 {
-    lista_t *lista = calloc(1, sizeof(lista_t));
-    if (!lista) {
-        return NULL;
-    }
-    return lista;
+    return calloc(1, sizeof(lista_t));
 }
 
 lista_t *lista_insertar(lista_t *lista, void *elemento)
@@ -40,12 +38,10 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 
     if (!lista->nodo_inicio) {
         lista->nodo_inicio = nuevo_nodo;
+        lista->nodo_final = nuevo_nodo;
     } else {
-        nodo_t *nodo_actual = lista->nodo_inicio;
-        while (nodo_actual->siguiente) {
-            nodo_actual = nodo_actual->siguiente;
-        }
-        nodo_actual->siguiente = nuevo_nodo;
+        lista->nodo_final->siguiente = nuevo_nodo;
+        lista->nodo_final = nuevo_nodo;
     }
 
     lista->cantidad++;
@@ -59,19 +55,13 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
     }
 
     if (posicion == 0) {
-        nodo_t *nuevo_nodo = malloc(sizeof(nodo_t));
-        if (!nuevo_nodo) {
-            return NULL;
-        }
-        nuevo_nodo->elemento = elemento;
-        nuevo_nodo->siguiente = lista->nodo_inicio;
-        lista->nodo_inicio = nuevo_nodo;
-        lista->cantidad++;
-        return lista;
+        return lista_insertar(lista, elemento);
     }
 
     nodo_t *nodo_actual = lista->nodo_inicio;
-    for (size_t i = 1; i < posicion; i++) {
+    nodo_t *nodo_anterior = NULL;
+    for (size_t i = 0; i < posicion; i++) {
+        nodo_anterior = nodo_actual;
         nodo_actual = nodo_actual->siguiente;
     }
 
@@ -80,8 +70,8 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
         return NULL;
     }
     nuevo_nodo->elemento = elemento;
-    nuevo_nodo->siguiente = nodo_actual->siguiente;
-    nodo_actual->siguiente = nuevo_nodo;
+    nuevo_nodo->siguiente = nodo_actual;
+    nodo_anterior->siguiente = nuevo_nodo;
 
     lista->cantidad++;
     return lista;
@@ -93,22 +83,15 @@ void *lista_quitar(lista_t *lista)
         return NULL;
     }
 
-    nodo_t *nodo_actual = lista->nodo_inicio;
-    nodo_t *nodo_anterior = NULL;
+    nodo_t *nodo_a_eliminar = lista->nodo_inicio;
+    void *elemento = nodo_a_eliminar->elemento;
+    lista->nodo_inicio = nodo_a_eliminar->siguiente;
 
-    while (nodo_actual->siguiente) {
-        nodo_anterior = nodo_actual;
-        nodo_actual = nodo_actual->siguiente;
+    if (!lista->nodo_inicio) {
+        lista->nodo_final = NULL;
     }
 
-    if (nodo_anterior) {
-        nodo_anterior->siguiente = NULL;
-    } else {
-        lista->nodo_inicio = NULL;
-    }
-
-    void *elemento = nodo_actual->elemento;
-    free(nodo_actual);
+    free(nodo_a_eliminar);
     lista->cantidad--;
     return elemento;
 }
@@ -120,12 +103,7 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
     }
 
     if (posicion == 0) {
-        nodo_t *nodo_a_eliminar = lista->nodo_inicio;
-        lista->nodo_inicio = nodo_a_eliminar->siguiente;
-        void *elemento = nodo_a_eliminar->elemento;
-        free(nodo_a_eliminar);
-        lista->cantidad--;
-        return elemento;
+        return lista_quitar(lista);
     }
 
     nodo_t *nodo_actual = lista->nodo_inicio;
@@ -188,12 +166,7 @@ void *lista_ultimo(lista_t *lista)
         return NULL;
     }
 
-    nodo_t *nodo_actual = lista->nodo_inicio;
-    while (nodo_actual->siguiente) {
-        nodo_actual = nodo_actual->siguiente;
-    }
-
-    return nodo_actual->elemento;
+    return lista->nodo_final->elemento;
 }
 
 bool lista_vacia(lista_t *lista)
@@ -257,6 +230,7 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
     }
 
     iterador->nodo_actual = lista->nodo_inicio;
+    iterador->lista = lista;
     return iterador;
 }
 
@@ -270,11 +244,11 @@ bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 
 bool lista_iterador_avanzar(lista_iterador_t *iterador)
 {
-    if (!iterador || !iterador->nodo_actual || !iterador->nodo_actual->siguiente) {
+    if (!iterador || !iterador->nodo_actual) {
         return false;
     }
     iterador->nodo_actual = iterador->nodo_actual->siguiente;
-    return true;
+    return iterador->nodo_actual != NULL;
 }
 
 void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
