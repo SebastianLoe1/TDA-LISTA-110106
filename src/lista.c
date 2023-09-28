@@ -118,25 +118,42 @@ void *lista_quitar(lista_t *lista)
 
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 {
-    if (!lista || posicion >= lista->cantidad) {
+    if (!lista) {
         return NULL;
-    }
-
-    if (posicion == 0) {
-        return lista_quitar(lista);
     }
 
     nodo_t *nodo_actual = lista->nodo_inicio;
     nodo_t *nodo_anterior = NULL;
-    for (size_t i = 0; i < posicion; i++) {
-        nodo_anterior = nodo_actual;
-        nodo_actual = nodo_actual->siguiente;
+    void* elemento = nodo_actual->elemento;
+
+    if (posicion == 0) {
+        if(lista->nodo_inicio->siguiente){
+            nodo_t *nodo_siguiente = lista->nodo_inicio->siguiente;
+            free(nodo_actual);
+            lista->nodo_inicio = nodo_siguiente;
+        }
+
+        else if(!lista->nodo_inicio->siguiente){
+            return lista_quitar(lista);
+        }
     }
 
-    nodo_anterior->siguiente = nodo_actual->siguiente;
-    void *elemento = nodo_actual->elemento;
-    free(nodo_actual);
-    lista->cantidad--;
+    else if(posicion < lista->cantidad){
+        for(size_t i = 0; i < posicion; i++){
+            nodo_anterior = nodo_actual;
+            nodo_actual = nodo_actual->siguiente;
+            elemento = nodo_actual->elemento;
+        }
+
+        nodo_anterior->siguiente = nodo_actual->siguiente;
+        free(nodo_actual);
+        lista->cantidad--;
+    }
+
+    else if(posicion >= lista->cantidad){
+        return lista_quitar(lista);
+    }
+
     return elemento;
 }
 
@@ -212,12 +229,13 @@ void lista_destruir(lista_t *lista)
     }
 
     nodo_t *nodo_actual = lista->nodo_inicio;
-    while (nodo_actual) {
+    for(int i = 0; i < lista->cantidad; i++) {
         nodo_t *nodo_siguiente = nodo_actual->siguiente;
         free(nodo_actual);
         nodo_actual = nodo_siguiente;
     }
 
+    free(nodo_actual);
     free(lista);
 }
 
@@ -228,14 +246,14 @@ void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
     }
 
     nodo_t *nodo_actual = lista->nodo_inicio;
-    while (nodo_actual) {
-        nodo_t *nodo_siguiente = nodo_actual->siguiente;
-        funcion(nodo_actual->elemento);
-        free(nodo_actual);
-        nodo_actual = nodo_siguiente;
+    for(int i = 0; i < lista->cantidad; i++) {
+        if(funcion){
+            funcion(nodo_actual->elemento);
+        }
+        nodo_actual = nodo_actual->siguiente;
     }
 
-    free(lista);
+    lista_destruir(lista);
 }
 
 lista_iterador_t *lista_iterador_crear(lista_t *lista)
