@@ -108,11 +108,11 @@ void *lista_quitar(lista_t *lista)
     nodo_t *nodo_actual = lista->nodo_inicio;
     void* elemento = nodo_actual->elemento;
 
-    for(int i = 0; i < lista->cantidad-1; i++){
+    for(int i = 0; i < lista->cantidad-2; i++){
         nodo_actual = nodo_actual->siguiente;
         elemento = nodo_actual->elemento;
     }
-
+    free(lista->nodo_final);
 
     lista->nodo_final = nodo_actual;
     lista->cantidad--;
@@ -240,7 +240,6 @@ void lista_destruir(lista_t *lista)
         nodo_actual = nodo_siguiente;
     }
 
-    free(nodo_actual);
     free(lista);
 }
 
