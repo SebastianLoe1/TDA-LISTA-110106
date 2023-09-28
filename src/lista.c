@@ -55,6 +55,10 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
         return NULL;
     }
 
+    if(posicion >= lista->cantidad){
+        return lista_insertar(lista, elemento);
+    }
+
     if (posicion == 0) {
         nodo_t *nuevo_nodo = malloc(sizeof(nodo_t));
         if (!nuevo_nodo) {
@@ -82,17 +86,13 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
         nodo_t *nodo_actual = lista->nodo_inicio;
         nodo_t *nodo_anterior = NULL;
         
-        for (size_t i = 0; i < posicion; i++) {
+        for (size_t i = 0; i < posicion-1; i++) {
             nodo_anterior = nodo_actual;
             nodo_actual = nodo_actual->siguiente;
         }
 
         nuevo_nodo->siguiente = nodo_actual;
         nodo_anterior->siguiente = nuevo_nodo;
-    }
-
-    else if(posicion >= lista->cantidad){
-        return lista_insertar(lista, elemento);
     }
 
     lista->cantidad++;
