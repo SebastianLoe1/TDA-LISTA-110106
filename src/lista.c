@@ -51,7 +51,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
 
 lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posicion)
 {
-    if (!lista || posicion > lista->cantidad) {
+    if (!lista) {
         return NULL;
     }
 
@@ -223,7 +223,7 @@ void lista_destruir(lista_t *lista)
 
 void lista_destruir_todo(lista_t *lista, void (*funcion)(void *))
 {
-    if (!lista || !funcion) {
+    if (!lista) {
         return;
     }
 
