@@ -118,7 +118,7 @@ void *lista_quitar(lista_t *lista)
 
 void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 {
-    if (!lista) {
+    if (!lista || lista->cantidad == 0) {
         return NULL;
     }
 
@@ -131,6 +131,7 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
             nodo_t *nodo_siguiente = lista->nodo_inicio->siguiente;
             free(nodo_actual);
             lista->nodo_inicio = nodo_siguiente;
+            
         }
 
         else if(!lista->nodo_inicio->siguiente){
@@ -147,13 +148,14 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 
         nodo_anterior->siguiente = nodo_actual->siguiente;
         free(nodo_actual);
-        lista->cantidad--;
+        
     }
 
     else if(posicion >= lista->cantidad){
         return lista_quitar(lista);
     }
 
+    lista->cantidad--;
     return elemento;
 }
 
