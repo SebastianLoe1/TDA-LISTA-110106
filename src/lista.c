@@ -112,6 +112,8 @@ void *lista_quitar(lista_t *lista)
         nodo_actual = nodo_actual->siguiente;
         elemento = nodo_actual->elemento;
     }
+    
+    elemento = lista->nodo_final->elemento;
     free(lista->nodo_final);
 
     lista->nodo_final = nodo_actual;
@@ -316,7 +318,7 @@ size_t lista_con_cada_elemento(lista_t *lista, bool (*funcion)(void *, void *), 
     nodo_t *nodo_actual = lista->nodo_inicio;
     while (nodo_actual) {
         elementos_recorridos++;
-        
+
         if (!funcion(nodo_actual->elemento, contexto)) {
             return elementos_recorridos;
         }
