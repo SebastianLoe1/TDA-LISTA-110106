@@ -100,19 +100,19 @@ void *lista_quitar(lista_t *lista)
         return NULL;
     }
 
+    lista->cantidad--;
+    free(lista->nodo_final);
+
     nodo_t *nodo_actual = lista->nodo_inicio;
-    nodo_t *nodo_anterior = NULL;
     void* elemento = nodo_actual->elemento;
 
-    while(nodo_actual->siguiente){
-        nodo_anterior = nodo_actual;
+    for(int i = 0; i < lista->cantidad; i++){
         nodo_actual = nodo_actual->siguiente;
         elemento = nodo_actual->elemento;
     }
 
-    lista->nodo_final = nodo_anterior;
-    free(nodo_actual);
-    lista->cantidad--;
+    lista->nodo_final = nodo_actual;
+
     return elemento;
 }
 
@@ -314,7 +314,7 @@ size_t lista_con_cada_elemento(lista_t *lista, bool (*funcion)(void *, void *), 
     nodo_t *nodo_actual = lista->nodo_inicio;
     while (nodo_actual) {
         if (!funcion(nodo_actual->elemento, contexto)) {
-            break;
+            return elementos_recorridos;
         }
         elementos_recorridos++;
         nodo_actual = nodo_actual->siguiente;
