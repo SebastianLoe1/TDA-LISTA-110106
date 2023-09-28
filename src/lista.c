@@ -37,7 +37,7 @@ lista_t *lista_insertar(lista_t *lista, void *elemento)
     nuevo_nodo->elemento = elemento;
     nuevo_nodo->siguiente = NULL;
 
-    if (!lista->nodo_inicio) {
+    if (lista->cantidad == 0) {
         lista->nodo_inicio = nuevo_nodo;
         lista->nodo_final = nuevo_nodo;
     } else {
@@ -100,15 +100,18 @@ void *lista_quitar(lista_t *lista)
         return NULL;
     }
 
-    nodo_t *nodo_a_eliminar = lista->nodo_inicio;
-    void *elemento = nodo_a_eliminar->elemento;
-    lista->nodo_inicio = nodo_a_eliminar->siguiente;
+    nodo_t *nodo_actual = lista->nodo_inicio;
+    nodo_t *nodo_anterior = NULL;
+    void* elemento = nodo_actual->elemento;
 
-    if (!lista->nodo_inicio) {
-        lista->nodo_final = NULL;
+    while(nodo_actual->siguiente){
+        nodo_anterior = nodo_actual;
+        nodo_actual = nodo_actual->siguiente;
+        elemento = nodo_actual->elemento;
     }
 
-    free(nodo_a_eliminar);
+    lista->nodo_final = nodo_anterior;
+    free(nodo_actual);
     lista->cantidad--;
     return elemento;
 }
