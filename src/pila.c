@@ -126,7 +126,7 @@ void *pila_desapilar(pila_t *pila)
     if (!pila || lista_vacia(pila->lista)) {
         return NULL;
     }
-    return lista_quitar(pila->lista);
+    return lista_quitar_de_posicion(pila->lista, 0);
 }
 
 void *pila_tope(pila_t *pila)
