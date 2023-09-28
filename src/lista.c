@@ -72,7 +72,7 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
         }
     }
 
-    else if (posicion <= lista->cantidad){
+    else if (posicion < lista->cantidad){
         nodo_t *nodo_actual = lista->nodo_inicio;
         nodo_t *nodo_anterior = NULL;
         
@@ -86,7 +86,7 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
         nodo_anterior->siguiente = nuevo_nodo;
     }
 
-    else if(posicion > lista->cantidad){
+    else if(posicion >= lista->cantidad){
         return lista_insertar(lista, elemento);
     }
 
