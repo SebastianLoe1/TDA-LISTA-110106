@@ -62,7 +62,6 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
     if (posicion == 0) {
         nodo_t *nuevo_nodo = malloc(sizeof(nodo_t));
         if (!nuevo_nodo) {
-            lista_destruir(lista);
             return NULL;
         }
         nuevo_nodo->elemento = elemento;
@@ -78,7 +77,6 @@ lista_t *lista_insertar_en_posicion(lista_t *lista, void *elemento, size_t posic
     else if (posicion < lista->cantidad){
         nodo_t *nuevo_nodo = malloc(sizeof(nodo_t));
         if (!nuevo_nodo) {
-            lista_destruir(lista);
             return NULL;
         }
         nuevo_nodo->elemento = elemento;
@@ -106,14 +104,12 @@ void *lista_quitar(lista_t *lista)
     }
 
     nodo_t *nodo_actual = lista->nodo_inicio;
-    void* elemento = nodo_actual->elemento;
-
+    
     for(int i = 0; i < lista->cantidad-2; i++){
         nodo_actual = nodo_actual->siguiente;
-        elemento = nodo_actual->elemento;
     }
-    
-    elemento = lista->nodo_final->elemento;
+
+    void *elemento = lista->nodo_final->elemento;
     free(lista->nodo_final);
 
     lista->nodo_final = nodo_actual;
@@ -133,10 +129,9 @@ void *lista_quitar_de_posicion(lista_t *lista, size_t posicion)
 
     if (posicion == 0) {
         if(lista->nodo_inicio->siguiente){
-            nodo_t *nodo_siguiente = lista->nodo_inicio->siguiente;
-            free(nodo_actual);
-            lista->nodo_inicio = nodo_siguiente;
-            
+            nodo_t *nodo_a_borrar = lista->nodo_inicio;
+            lista->nodo_inicio = lista->nodo_inicio->siguiente;
+            free(nodo_a_borrar);
         }
 
         else if(!lista->nodo_inicio->siguiente){
@@ -283,16 +278,20 @@ bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
     if (!iterador || !iterador->nodo_actual) {
         return false;
     }
-    return true;
+
+    return iterador->nodo_actual;
 }
+
+#include<stdio.h>
 
 bool lista_iterador_avanzar(lista_iterador_t *iterador)
 {
+    printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     if (!iterador || !iterador->nodo_actual) {
         return false;
     }
     iterador->nodo_actual = iterador->nodo_actual->siguiente;
-    return iterador->nodo_actual != NULL;
+    return lista_iterador_tiene_siguiente(iterador);
 }
 
 void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
@@ -300,6 +299,7 @@ void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
     if (!iterador || !iterador->nodo_actual) {
         return NULL;
     }
+
     return iterador->nodo_actual->elemento;
 }
 
