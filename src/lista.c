@@ -106,17 +106,16 @@ void *lista_quitar(lista_t *lista)
     }
 
     nodo_t *nodo_actual = lista->nodo_inicio;
-    void* elemento = nodo_actual->elemento;
 
     for(int i = 0; i < lista->cantidad-2; i++){
         nodo_actual = nodo_actual->siguiente;
-        elemento = nodo_actual->elemento;
     }
     
-    elemento = lista->nodo_final->elemento;
+    void* elemento = lista->nodo_final->elemento;
     free(lista->nodo_final);
-
+    
     lista->nodo_final = nodo_actual;
+    lista->nodo_final->siguiente = NULL;
     lista->cantidad--;
     return elemento;
 }
@@ -280,7 +279,7 @@ lista_iterador_t *lista_iterador_crear(lista_t *lista)
 
 bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 {
-    if (!iterador || !iterador->nodo_actual) {
+    if (!iterador || !(iterador->nodo_actual)) {
         return false;
     }
     return true;
@@ -288,7 +287,7 @@ bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
 
 bool lista_iterador_avanzar(lista_iterador_t *iterador)
 {
-    if (!iterador || !iterador->nodo_actual) {
+    if (!iterador || !(iterador->nodo_actual)) {
         return false;
     }
     iterador->nodo_actual = iterador->nodo_actual->siguiente;
@@ -297,7 +296,7 @@ bool lista_iterador_avanzar(lista_iterador_t *iterador)
 
 void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
 {
-    if (!iterador || !iterador->nodo_actual) {
+    if (!iterador || !(iterador->nodo_actual)) {
         return NULL;
     }
     return iterador->nodo_actual->elemento;
@@ -327,36 +326,3 @@ size_t lista_con_cada_elemento(lista_t *lista, bool (*funcion)(void *, void *), 
 
     return elementos_recorridos;
 }
-
-
-/*
-bool lista_iterador_tiene_siguiente(lista_iterador_t *iterador)
-{
-    if (!iterador || !iterador->nodo_actual) {
-        return false;
-    }
-
-    return iterador->nodo_actual != NULL;
-}
-
-bool lista_iterador_avanzar(lista_iterador_t *iterador)
-{
-    if (!iterador || !iterador->nodo_actual) {
-        return false;
-    }
-    iterador->nodo_actual = iterador->nodo_actual->siguiente;
-    return lista_iterador_tiene_siguiente(iterador);
-}
-
-void *lista_iterador_elemento_actual(lista_iterador_t *iterador)
-{
-    if (!iterador || !iterador->nodo_actual) {
-        return NULL;
-    }
-    return iterador->nodo_actual->elemento;
-}
-
-void lista_iterador_destruir(lista_iterador_t *iterador)
-{
-    free(iterador);
-}*/
