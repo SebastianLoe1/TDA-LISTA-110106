@@ -1,155 +1,55 @@
 #include "cola.h"
+#include "lista.h"
 
 typedef struct nodo {
-    void *elemento;
-    struct nodo *siguiente;
+	void *elemento;
+	struct nodo *siguiente;
 } nodo_t;
 
 struct _cola_t {
-    nodo_t *inicio;
-    nodo_t *fin;
-    size_t cantidad;
+	nodo_t *nodo_inicio;
+    nodo_t *nodo_final;
+    int cantidad;
 };
 
 cola_t *cola_crear()
 {
-    cola_t *cola = malloc(sizeof(cola_t));
-    if (!cola) {
-        return NULL;
-    }
-    cola->inicio = NULL;
-    cola->fin = NULL;
-    cola->cantidad = 0;
-    return cola;
+	return (cola_t *)lista_crear();
 }
 
 cola_t *cola_encolar(cola_t *cola, void *elemento)
 {
-    if (!cola) {
-        return NULL;
-    }
-
-    nodo_t *nuevo_nodo = malloc(sizeof(nodo_t));
-    if (!nuevo_nodo) {
-        return NULL;
-    }
-    nuevo_nodo->elemento = elemento;
-    nuevo_nodo->siguiente = NULL;
-
-    if (!cola->inicio) {
-        cola->inicio = nuevo_nodo;
-    } else {
-        cola->fin->siguiente = nuevo_nodo;
-    }
-
-    cola->fin = nuevo_nodo;
-    cola->cantidad++;
-    return cola;
+	lista_insertar((lista_t*)cola, elemento);
+	return cola;
 }
 
 void *cola_desencolar(cola_t *cola)
 {
-    if (!cola || cola->cantidad == 0) {
-        return NULL;
-    }
-
-    nodo_t *nodo_a_eliminar = cola->inicio;
-    void *elemento = nodo_a_eliminar->elemento;
-    cola->inicio = nodo_a_eliminar->siguiente;
-
-    if (!cola->inicio) {
-        cola->fin = NULL;
-    }
-
-    free(nodo_a_eliminar);
-    cola->cantidad--;
-    return elemento;
+	if (!cola || lista_vacia((lista_t*)cola)) {
+		return NULL;
+	}
+	return lista_quitar_de_posicion((lista_t*)cola, 0);
 }
 
 void *cola_frente(cola_t *cola)
 {
-    if (!cola || cola->cantidad == 0) {
-        return NULL;
-    }
-    return cola->inicio->elemento;
+	if (!cola || lista_vacia((lista_t*)cola)) {
+		return NULL;
+	}
+	return lista_primero((lista_t*)cola);
 }
 
 size_t cola_tamanio(cola_t *cola)
 {
-    if (!cola) {
-        return 0;
-    }
-    return cola->cantidad;
+	return lista_tamanio((lista_t*)cola);
 }
 
 bool cola_vacia(cola_t *cola)
 {
-    if (!cola || cola->cantidad == 0) {
-        return true;
-    }
-    return false;
+	return lista_vacia((lista_t*)cola);
 }
 
 void cola_destruir(cola_t *cola)
 {
-    if (!cola) {
-        return;
-    }
-
-    nodo_t *nodo_actual = cola->inicio;
-    while (nodo_actual) {
-        nodo_t *nodo_siguiente = nodo_actual->siguiente;
-        free(nodo_actual);
-        nodo_actual = nodo_siguiente;
-    }
-
-    free(cola);
+	lista_destruir((lista_t*)cola);
 }
-
-
-/*
-struct _cola_t {
-    lista_t *lista;
-};
-
-cola_t *cola_crear()
-{
-    return (cola_t*)lista_crear();
-}
-
-cola_t *cola_encolar(cola_t *cola, void *elemento)
-{
-    lista_insertar(cola->lista, elemento);
-    return cola;
-}
-
-void *cola_desencolar(cola_t *cola)
-{
-    if (!cola || lista_vacia(cola->lista)) {
-        return NULL;
-    }
-    return lista_quitar_de_posicion(cola->lista, 0);
-}
-
-void *cola_frente(cola_t *cola)
-{
-    if (!cola || lista_vacia(cola->lista)) {
-        return NULL;
-    }
-    return lista_primero(cola->lista);
-}
-
-size_t cola_tamanio(cola_t *cola)
-{
-    return lista_tamanio(cola->lista);
-}
-
-bool cola_vacia(cola_t *cola)
-{
-    return lista_vacia(cola->lista);
-}
-
-void cola_destruir(cola_t *cola)
-{
-    lista_destruir(cola->lista);
-}*/
