@@ -6,7 +6,6 @@ typedef struct nodo {
 	struct nodo *siguiente;
 } nodo_t;
 
-
 struct _pila_t {
 	nodo_t *nodo_inicio;
 	nodo_t *nodo_final;
