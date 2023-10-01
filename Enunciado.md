@@ -44,31 +44,31 @@ Verifica la siguiente lista antes de entregar tu TP
 
 ### General
 
--   [ ] Cada malloc tiene su verificación
--   [ ] Libera(cierra) memoria(archivos) en los casos de error
--   [ ] Reallocs sobre punteros auxiliares
--   [ ] No hay fragmentos de código comentado (si no se usa, se borra)
--   [ ] No hay printfs donde no es necesario
--   [ ] Los entregables compilan y corren sin error
--   [ ] Verifica los punteros recibidos
--   [ ] No hay variables globales
--   [ ] No reserva memoria cuando no es necesario
--   [ ] Usa constantes y tienen sentido.
+-   [✓] Cada malloc tiene su verificación
+-   [✓] Libera(cierra) memoria(archivos) en los casos de error
+-   [✓] Reallocs sobre punteros auxiliares
+-   [✓] No hay fragmentos de código comentado (si no se usa, se borra)
+-   [✓] No hay printfs donde no es necesario
+-   [✓] Los entregables compilan y corren sin error
+-   [✓] Verifica los punteros recibidos
+-   [✓] No hay variables globales
+-   [✓] No reserva memoria cuando no es necesario
+-   [✓] Usa constantes y tienen sentido.
 
 ### Estilo
 
--   [ ] El estilo es el apropiado
--   [ ] Los nombres de función me dicen lo que hacen
--   [ ] No hay variables con nombre confuso
+-   [✓] El estilo es el apropiado
+-   [✓] Los nombres de función me dicen lo que hacen
+-   [✓] No hay variables con nombre confuso
 
 ### Lista
 
--   [ ] Reutiliza funciones donde es apropiado
--   [ ] Las complejidades son adecuadas
+-   [✓] Reutiliza funciones donde es apropiado
+-   [✓] Las complejidades son adecuadas
     -   Push/Pop **deben** ser **O(1)**
     -   Lo mismo con Encolar/Desencolar.
--   [ ] El iterador interno NO usa lista\_en\_posición
--   [ ] El iterador interno NO usa el externo 
--   [ ] El iterador externo NO usa lista\_en\_posición
--   [ ] Responde las preguntas teóricas en el informe.
+-   [✓] El iterador interno NO usa lista\_en\_posición
+-   [✓] El iterador interno NO usa el externo 
+-   [✓] El iterador externo NO usa lista\_en\_posición
+-   [✓] Responde las preguntas teóricas en el informe.
 
