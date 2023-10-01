@@ -99,19 +99,18 @@ void *lista_quitar(lista_t *lista)
 		return NULL;
 	}
 
-    if(lista->cantidad == 1){
-        void* elemento = lista->nodo_inicio->elemento;
-        
-        free(lista->nodo_final);
-        
-        lista->nodo_final = NULL;
-        lista->nodo_inicio = NULL;
-        
-        lista->cantidad--;
+	if (lista->cantidad == 1) {
+		void *elemento = lista->nodo_inicio->elemento;
 
+		free(lista->nodo_final);
 
-        return elemento;
-    }
+		lista->nodo_final = NULL;
+		lista->nodo_inicio = NULL;
+
+		lista->cantidad--;
+
+		return elemento;
+	}
 	nodo_t *nodo_actual = lista->nodo_inicio;
 
 	for (int i = 0; i < lista->cantidad - 2; i++) {

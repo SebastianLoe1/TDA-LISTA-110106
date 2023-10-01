@@ -70,29 +70,6 @@ Explicando en detalle 'lista.c', este contiene las funciones dadas en 'lista.h':
 
         - 'cola.c' y 'pila.c' tienen funciones muy similares y reutiliza funciones de 'lista.c'. Puesto que su funcionamiento responde a una de las preguntas teóricas, no se explicará en esta parte.
 
-### Por ejemplo:
-
-El programa funciona abriendo el archivo pasado como parámetro y leyendolo línea por línea. Por cada línea crea un registro e intenta agregarlo al vector. La función de lectura intenta leer todo el archivo o hasta encontrar el primer error. Devuelve un vector con todos los registros creados.
-
-<div align="center">
-<img width="70%" src="img/diagrama1.svg">
-</div>
-
-En el archivo `sarasa.c` la función `funcion1` utiliza `realloc` para agrandar la zona de memoria utilizada para conquistar el mundo. El resultado de `realloc` lo guardo en una variable auxiliar para no perder el puntero original en caso de error:
-
-```c
-int *vector = realloc(vector_original, (n+1)*sizeof(int));
-
-if(vector == NULL)
-    return -1;
-vector_original = vector;
-```
-
-
-<div align="center">
-<img width="70%" src="img/diagrama2.svg">
-</div>
-
 ---
 
 ## Respuestas a las preguntas teóricas
@@ -130,11 +107,73 @@ Cola:
 
 - Explica y analiza las diferencias de complejidad entre las implementaciones de lista simplemente enlazada, doblemente enlazada y vector dinámico para las operaciones:
    - Insertar/obtener/eliminar al inicio
-   - Insertar/obtener/eliminar al final
-   - Insertar/obtener/eliminar al medio
+        Lista simplemente enlazada: se requiere actualizar el puntero del primer nodo, por lo que tiene una complejidad de O(1)
+        
+        Lista doblemente enlazada: para este caso, como también se requiere actualizar el puntero del primer nodo para la inserción, o la del segundo para la eliminación, por lo que su complejidad es de O(1)
 
+        Vector dinámico: la inserción o eliminación de un elemento requiere que se desplacen todos los elementos hacia un lado, por lo que tiene una complejidad de O(n). 
+
+
+   - Insertar/obtener/eliminar al final
+        Lista simplemente enlazada: para insertar al final se puede acceder directamente a la última posición e insertar el elemento y actualizar el nodo, con lo cual la complejidad es O(1). Pero para eliminar y obtener es necesario recorrer toda la lista, por lo que la complejidad es O(n).
+
+        Lista doblemente enlazada: la inserción, la obtención y la eliminación al final tienen una complejidad de O(1) ya que es posible acceder a la última posición y su anterior directamente y actualizar los nodos.
+
+        Vector dinámico: al igual que la lista doblmente enlazada, se puede acceder directamente a la última posición del vector y actualizar los elementos, por lo que tiene una complejidad de O(1)
+
+
+   - Insertar/obtener/eliminar al medio
+        Lista simplemente enlazada: requiere recorrer la lista hasta llegar a la posición pedida para hacer cualquiera de las tres tareas, entonces tiene complejidad O(n).
+
+        Lista doblemente enlazada: también es necesario recorrer la lista entonces es de complejidad O(n).
+
+        Vector dinámico: La inserción y eliminación requieren desplazar todos los elementos hacia un lado por lo que tiene una complejidad de O(n) también.
 
 
 
 
 - Explica la complejidad de las operaciones implementadas en tu trabajo para la pila y la cola.
+
+Pila:
+    - pila_crear:
+        tiene complejidad de O(1) puesto que solo crea la lista y designa memoria para ello.
+
+    - pila_apilar:
+        tiene complejidad de O(1) puesto que inserta un elemento en el tope de la pila y solo se necesita actualizar el puntero del primer elemento.
+
+    - pila_desapilar:
+        desapila desde el tope, y solo se necesita actualizar el puntero del primer olomento por lo que es O(1).
+
+    - pila_tope:
+        devuelve el elemento del primer nodo de la pila, por lo que no es necesario recorrer, y su complejidad es O(1).
+
+    - pila_tamanio:
+        devuelve la cantidad de nodos que ya estaba siendo registrado en el struct. Por lo cual es solo buscar esa información, y su complejidad es O(1).
+
+    - pila_vacia:
+        chequea si la pila existe o si la cantidad de nodos es distinta de 0, por lo que su complejidad es O(1).
+
+    - pila_destruir:
+        como se debe liberar la memoria de cada nodo, y se debe recorrer la lista, la complejidad es de O(n).
+
+Cola:
+    - cola_crear:
+        mismo caso que pila, la complejidad es O(1).
+
+    - cola_encolar: 
+        inserta un elemento al final de la cola y puede accederse directamente a ese elemento, por lo que la complejidad es O(1).
+
+    - cola_desencolar:
+        mismo caso que desapilar, pero la palabra técnica para posición 0 es 'frente', la complejidad es O(1).
+
+    - cola_frente:
+        mismo caso que pila_tope. La complejidad es O(1).
+
+    - cola_tamanio:
+        mismo caso que pila_tamanio. Su complejidad es O(1).
+    
+    - cola_vacia: 
+        mismo caso que pila_vacia. Su complejidad es O(1).
+    
+    - cola_destruir:
+        mismo caso que pila_destruir. Su complejidad es O(n).
